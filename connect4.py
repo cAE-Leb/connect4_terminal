@@ -1,18 +1,29 @@
 """
 This program will be a terminal based version of the popular two player board game, Connect Four. 
-A standard 7 x 6 sized board will be used. https://en.wikipedia.org/wiki/Connect_Four
+A standard 7 x 6 sized board will be used. https://en.wikipedia.org/wiki/Connect_Four. To run the game,
+play in the command prompt or Powershell terminals for microsoft.
 """
 
+import os
+from colorama import init, Fore
+
 # global variables
+RED = '\033[91m'
+BLUE = '\033[94m'
+RESET = '\033[0m'
 NUM_ROWS = 6
 NUM_COLS = 7
-EMPTY = ' '
-PLAYER_1 = 'X'
-PLAYER_2 = 'O'
+SOLID_CIRCLE = "●"
+EMPTY_CIRCLE = "○"
+PLAYER_1 = RED + SOLID_CIRCLE + RESET
+PLAYER_2 = BLUE + SOLID_CIRCLE + RESET
+EMPTY = EMPTY_CIRCLE
 
 player_1_wins = 0
 player_2_wins = 0
 total_games = 0
+
+init(autoreset=True)
 
 
 def print_column_numbers():
@@ -24,7 +35,14 @@ def print_column_numbers():
 def print_board(board):
     for row in range(NUM_ROWS):
         for col in range(NUM_COLS):
-            print(board[col][row], end=' | ')
+            piece = board[col][row]
+            if piece == PLAYER_1:
+                print(Fore.RED + piece, end=' | ')
+            elif piece == PLAYER_2:
+                print(Fore.GREEN + piece, end= ' | ')
+            else:
+                print(piece, end=' | ')
+        
         print() # Move to the next line after printing a row
         print('-' * (NUM_COLS * 4)) # Print horizontal separators
 
@@ -111,6 +129,14 @@ def play_again():
     return response == 'y' or response == 'yes'
 
 
+def clear_screen():
+    #Check platform and clear screen accordingly
+    if os.name == 'posix':
+        os.system('clear')
+    else:
+        os.system('cls')
+
+
 
 if __name__ == "__main__":
 
@@ -126,6 +152,7 @@ if __name__ == "__main__":
 
         #main loop
         while not game_over:
+            clear_screen()
             display_board(board)
 
             column = get_player_input(current_player)
