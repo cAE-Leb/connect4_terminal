@@ -34,6 +34,7 @@ def print_column_numbers():
 
 def print_board(board):
     for row in range(NUM_ROWS):
+        print(' ', end='') # add an extra space on the left most side column
         for col in range(NUM_COLS):
             piece = board[col][row]
             if piece == PLAYER_1:
@@ -44,7 +45,7 @@ def print_board(board):
                 print(piece, end=' | ')
         
         print() # Move to the next line after printing a row
-        print('-' * (NUM_COLS * 4)) # Print horizontal separators
+        print(' ' + '-' * (NUM_COLS * 4)) # Print horizontal separators
 
 
 def display_board(board):
