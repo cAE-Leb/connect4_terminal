@@ -32,4 +32,37 @@ def display_board(board):
     print_board(board)
 
 
-display_board(board)
+current_player = PLAYER_1
+
+def get_player_input(player):
+    return int(input(f"Player {player}, choose a column (0 - {NUM_COLS-1}): "))
+
+
+def is_valid_move(board, column):
+    if 0 <= column < NUM_COLS and board[column][0] == EMPTY: #validate range and if spot is empty
+        return True
+    return False
+
+
+def place_piece(board, column, player):
+    for row in reversed(range(NUM_ROWS)):
+        if board[column][row] == EMPTY:
+            board[column][row] = player
+            break
+
+
+if __name__ == "__main__":
+    board = [[EMPTY for _ in range(NUM_ROWS)] for _ in range(NUM_COLS)]
+    current_player = PLAYER_1
+    
+    for _ in range(NUM_ROWS * NUM_COLS):  # This will allow for the maximum number of moves in a game
+        display_board(board)
+        column = get_player_input(current_player)
+        
+        while not is_valid_move(board, column):
+            print("Invalid move. Try again.")
+            column = get_player_input(current_player)
+        
+        place_piece(board, column, current_player)
+        current_player = PLAYER_2 if current_player == PLAYER_1 else PLAYER_1  # Switch player for next turn
+
