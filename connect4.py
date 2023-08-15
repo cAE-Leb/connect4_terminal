@@ -16,7 +16,7 @@ total_games = 0
 
 
 def print_column_numbers():
-    for col in range(NUM_COLS):
+    for col in range(1, NUM_COLS + 1): # go from 1 - 7
         print(col, end='   ')
     print() # To move to the next line after printing all column numbers
 
@@ -35,7 +35,15 @@ def display_board(board):
 
 
 def get_player_input(player):
-    return int(input(f"Player {player}, choose a column (0 - {NUM_COLS-1}): "))
+    while True:
+        try:
+            column = int(input(f"Player {player}, choose a column (1 - {NUM_COLS}): "))
+            if 1 <= column <= NUM_COLS:
+                return column - 1 # convert to zero based index
+            else:
+                print(f"Please choose a column between 1 and {NUM_COLS}.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
 
 
 def is_valid_move(board, column):
