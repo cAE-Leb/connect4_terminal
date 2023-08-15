@@ -10,6 +10,10 @@ EMPTY = ' '
 PLAYER_1 = 'X'
 PLAYER_2 = 'O'
 
+player_1_wins = 0
+player_2_wins = 0
+total_games = 0
+
 
 def print_column_numbers():
     for col in range(NUM_COLS):
@@ -94,35 +98,56 @@ def check_win(board):
     return False
 
 
+def play_again():
+    response = input("Do you want to play again? Y/N: ").strip().lower()
+    return response == 'y' or response == 'yes'
+
+
 
 if __name__ == "__main__":
-    #initialize board
-    board = [[EMPTY for _ in range(NUM_ROWS)] for _ in range(NUM_COLS)]
-    current_player = PLAYER_1
 
-    #flag to check if game is still ongoing
-    game_over = False
+    keep_playing = True
+    while keep_playing:
 
+        #initialize board
+        board = [[EMPTY for _ in range(NUM_ROWS)] for _ in range(NUM_COLS)]
+        current_player = PLAYER_1
 
-    #main loop
-    while not game_over:
-        display_board(board)
+        #flag to check if game is still ongoing
+        game_over = False
 
-        column = get_player_input(current_player)
+        #main loop
+        while not game_over:
+            display_board(board)
 
-        while not is_valid_move(board, column):
-            print("Invalid move. Try again.")
             column = get_player_input(current_player)
 
-        place_piece(board, column, current_player)
-        if check_win(board):
-            display_board(board) # show the final winning board
-            print(f"Player {current_player} wins!")
-            game_over = True
-        else:
-            current_player = PLAYER_2 if current_player == PLAYER_1 else PLAYER_1
+            while not is_valid_move(board, column):
+                print("Invalid move. Try again.")
+                column = get_player_input(current_player)
 
-        if all([cell != EMPTY for row in board for cell in row]):
-            display_board(board)
-            print("Its a tie!")
-            game_over = True
+            place_piece(board, column, current_player)
+            
+            if check_win(board):
+                display_board(board) # show the final winning board
+                if current_player == PLAYER_1:
+                    player_1_wins += 1
+                else:
+                    player_2_wins += 1
+                total_games += 1
+                print(f"Player {current_player} wins!")
+                game_over = True
+            else:
+                current_player = PLAYER_2 if current_player == PLAYER_1 else PLAYER_1
+
+            if all([cell != EMPTY for row in board for cell in row]):
+                display_board(board)
+                print("Its a tie!")
+                total_games += 1
+                game_over = True
+
+        print(f"Player {PLAYER_1} wins: {player_1_wins}")
+        print(f"Player {PLAYER_2} wins: {player_2_wins}")
+        print(f"Total games played: {total_games}")
+
+        keep_playing = play_again() # prompt user to continue playing
